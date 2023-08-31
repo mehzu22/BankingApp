@@ -1,6 +1,6 @@
 class Account{
     static accountNo = 201
-    static passbook = []
+    //static passbook = []
     constructor(bankID,balance){
         this.accountNo=Account.accountNo++
         this.bankID=bankID
@@ -54,18 +54,18 @@ class Account{
             console.log(error.message)
         }
     }
-    static printPassbook(transactionDetails)
-    {
-        try {
-            Account.passbook.push(transactionDetails)
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-    static getPassbook()
-    {
-        return this.passbook
-    }
+    // static printPassbook(transactionDetails)
+    // {
+    //     try {
+    //         Account.passbook.push(transactionDetails)
+    //     } catch (error) {
+    //         console.log(error.message)
+    //     }
+    // }
+    // static getPassbook()
+    // {
+    //     return this.passbook
+    // }
 
     //Accounts me passbook ka list bana
 // Aur saare transactions usme push kar de

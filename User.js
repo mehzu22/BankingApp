@@ -12,6 +12,7 @@ class User {
         this.isAdmin = isAdmin
         this.id = User.id++
         this.userAccounts = []
+        this.passbook=[]
 
     }
     //create admin 
@@ -254,6 +255,18 @@ class User {
             console.log(error.message)
         }
     }
+    getPassbook()
+    {
+        try {
+            if(this.isAdmin)
+            {
+                throw new Error("Admin cannot accces users accounts")
+            }
+            return this.passbook
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
     #findAccount(accountNo)
     {
         for (let index = 0; index < this.userAccounts.length; index++) {
@@ -320,7 +333,7 @@ class User {
             let transactAmount = amount
             let currentBalance = foundAccountNo.getBalance()
             let transactionDetails= Transactions.newTransaction(date,senderID,receiverID,type,transactAmount,currentBalance)
-            Account.printPassbook(transactionDetails)
+            this.passbook.push(transactionDetails)
             return depoistedAmount
     
         } catch (error) {
@@ -349,24 +362,24 @@ class User {
             let currentBalance = foundAccountNo.getBalance()
             let transactionDetails = Transactions.newTransaction(date,senderID,receiverID,type,transactAmount,currentBalance)
             //console.log("transactions details : ",transactionDetails)
-            Account.printPassbook(transactionDetails)
+            this.passbook.push(transactionDetails)
             return withdrawalAmount
         } catch (error) {
             console.log(error.message)
         }
     }
-    getPassbook()
-    {
-        try {
-            if(this.isAdmin)
-            {
-                throw new Error("Admin cannot have access to users account")
-            }
-            return Account.getPassbook()
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
+    // getPassbook()
+    // {
+    //     try {
+    //         if(this.isAdmin)
+    //         {
+    //             throw new Error("Admin cannot have access to users account")
+    //         }
+    //         return Account.getPassbook()
+    //     } catch (error) {
+    //         console.log(error.message)
+    //     }
+    // }
     getTransactions()
     {
         try {
@@ -406,7 +419,7 @@ class User {
             let transactAmount = amount
             let senderCurrentBalance = foundSenderAccount.getBalance()
             let senderTransactionDetails = Transactions.newTransaction(date,senderID,null,senderType,transactAmount,senderCurrentBalance)
-            Account.printPassbook(senderTransactionDetails)
+            this.passbook.push(senderTransactionDetails)
 
             // //find receiver account and deposit amount and add transaction
             let [receiver,receiverid] = User.#findUser(receiverID)
@@ -421,8 +434,8 @@ class User {
             foundReceiverAccount.depositAmount(amount)
             let receiverType='Credit'
             let receiverCurrentBalance=foundReceiverAccount.getBalance()
-            Transactions.newTransaction(date,senderID,receiverID,receiverType,transactAmount,receiverCurrentBalance)
-            
+            let receiverTransactionsDetails = Transactions.newTransaction(date,senderID,receiverID,receiverType,transactAmount,receiverCurrentBalance)
+            receiver.passbook.push(receiverTransactionsDetails)
         } catch (error) {
             console.log(error.message)
         }
