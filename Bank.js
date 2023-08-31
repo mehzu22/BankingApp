@@ -1,5 +1,5 @@
 class Bank{
-    static bankID = 101//octal literas(at start u cant have 0)
+    static bankID = 101
     static banksList = []
     constructor(bankName,abbrevation)
     {

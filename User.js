@@ -288,18 +288,6 @@ class User {
         }
     }
 
-    
-    // #findAccountNo(accountNo)
-    // {
-    //     for (let index = 0; index < this.userAccounts.length; index++) {
-    //         if(accountNo == this.userAccounts[index].accountNo)
-    //         {
-    //             return this.userAccounts[index].accountNo
-    //         }
-            
-    //     }
-    //     return null
-    // }
     //user will deposit amount to account
     deposit(accountNo,amount)
     {
@@ -352,8 +340,7 @@ class User {
             let currentBalance = foundAccountNo.getBalance()
             let transactionDetails = Transactions.newTransaction(date,senderID,receiverID,type,transactAmount,currentBalance)
             //console.log("transactions details : ",transactionDetails)
-            // let senderPassbook = foundSenderAccount.getPassbook()
-            // senderPassbook.push(senderTransactionDetails)
+            
             let printPassbook=foundAccountNo.getPassbook()
             printPassbook.push(transactionDetails)
             return withdrawalAmount
