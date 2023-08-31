@@ -12,7 +12,7 @@ class User {
         this.isAdmin = isAdmin
         this.id = User.id++
         this.userAccounts = []
-        this.passbook=[]
+        
 
     }
     //create admin 
@@ -255,18 +255,7 @@ class User {
             console.log(error.message)
         }
     }
-    getPassbook()
-    {
-        try {
-            if(this.isAdmin)
-            {
-                throw new Error("Admin cannot accces users accounts")
-            }
-            return this.passbook
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
+    
     #findAccount(accountNo)
     {
         for (let index = 0; index < this.userAccounts.length; index++) {
@@ -333,7 +322,8 @@ class User {
             let transactAmount = amount
             let currentBalance = foundAccountNo.getBalance()
             let transactionDetails= Transactions.newTransaction(date,senderID,receiverID,type,transactAmount,currentBalance)
-            this.passbook.push(transactionDetails)
+            let printPassbook=foundAccountNo.getPassbook()
+            printPassbook.push(transactionDetails)
             return depoistedAmount
     
         } catch (error) {
@@ -362,24 +352,30 @@ class User {
             let currentBalance = foundAccountNo.getBalance()
             let transactionDetails = Transactions.newTransaction(date,senderID,receiverID,type,transactAmount,currentBalance)
             //console.log("transactions details : ",transactionDetails)
-            this.passbook.push(transactionDetails)
+            // let senderPassbook = foundSenderAccount.getPassbook()
+            // senderPassbook.push(senderTransactionDetails)
+            let printPassbook=foundAccountNo.getPassbook()
+            printPassbook.push(transactionDetails)
             return withdrawalAmount
         } catch (error) {
             console.log(error.message)
         }
     }
-    // getPassbook()
-    // {
-    //     try {
-    //         if(this.isAdmin)
-    //         {
-    //             throw new Error("Admin cannot have access to users account")
-    //         }
-    //         return Account.getPassbook()
-    //     } catch (error) {
-    //         console.log(error.message)
-    //     }
-    // }
+    getPassbook(accountID){
+        try {
+            if(this.isadmin){
+                throw new Error('Admin Cannot See Passbook')
+            }
+            let [foundAccount,indexOfFoundAccount] = this.#findAccount(accountID)
+            if(foundAccount == null){
+                throw new Error('Account Not Found')
+            }
+            //console.log("found account --<",foundAccount)
+            return foundAccount.getPassbook()
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
     getTransactions()
     {
         try {
@@ -400,11 +396,7 @@ class User {
             {
                 throw new Error("Admin can't have access to user account")
             }
-            // // sender account will get withdraw 
-            // this.withdraw(senderAccountNo,amount)
-
-            // //receiver account will get deposit
-            // this.deposit(receiverAccountNo,amount)
+            
 
             //find sender account and withdraw amount and also add transaction 
             let [foundSenderAccount,indexOFSenderAccount] = this.#findAccount(senderAccountNo)
@@ -419,7 +411,8 @@ class User {
             let transactAmount = amount
             let senderCurrentBalance = foundSenderAccount.getBalance()
             let senderTransactionDetails = Transactions.newTransaction(date,senderID,null,senderType,transactAmount,senderCurrentBalance)
-            this.passbook.push(senderTransactionDetails)
+            let senderPassbook = foundSenderAccount.getPassbook()
+            senderPassbook.push(senderTransactionDetails)
 
             // //find receiver account and deposit amount and add transaction
             let [receiver,receiverid] = User.#findUser(receiverID)
@@ -435,7 +428,8 @@ class User {
             let receiverType='Credit'
             let receiverCurrentBalance=foundReceiverAccount.getBalance()
             let receiverTransactionsDetails = Transactions.newTransaction(date,senderID,receiverID,receiverType,transactAmount,receiverCurrentBalance)
-            receiver.passbook.push(receiverTransactionsDetails)
+            let receiverPassbook=foundReceiverAccount.getPassbook()
+            receiverPassbook.push(receiverTransactionsDetails)
         } catch (error) {
             console.log(error.message)
         }

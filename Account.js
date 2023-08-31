@@ -5,6 +5,7 @@ class Account{
         this.accountNo=Account.accountNo++
         this.bankID=bankID
         this.balance=balance
+        this.passbook= []
     }
     static newAccount(bankID,balance)
     {
@@ -54,20 +55,12 @@ class Account{
             console.log(error.message)
         }
     }
-    // static printPassbook(transactionDetails)
-    // {
-    //     try {
-    //         Account.passbook.push(transactionDetails)
-    //     } catch (error) {
-    //         console.log(error.message)
-    //     }
-    // }
-    // static getPassbook()
-    // {
-    //     return this.passbook
-    // }
+   
+    getPassbook()
+    {
+        return this.passbook
+    }
 
-    //Accounts me passbook ka list bana
-// Aur saare transactions usme push kar de
+  
 }
 module.exports = Account
